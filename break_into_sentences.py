@@ -21,9 +21,6 @@ business =          client.yelp.business
 review =            client.yelp.review
 
 
-
-
-
 ##Function to get List of all Business IDs for Restaurants in Six U.S. Metropolitan Areas to Analyze
 def get_business_ids(location, mongo_query):
     print "Returning Business IDs for "+location+"..."
@@ -60,6 +57,7 @@ def create_sentence_df(in_collection, location, mongo_query):
             df.append(row)
     print "DF Created for: "+location
     return pd.DataFrame(df)
+
 
 
 ##Run Functions!
