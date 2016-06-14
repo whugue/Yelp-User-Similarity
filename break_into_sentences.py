@@ -10,12 +10,9 @@ from collections import defaultdict
 
 import pandas as pd
 from nltk.tokenize import sent_tokenize
+
 from pymongo import MongoClient
 from bson import Code
-
-from nltk.tokenize import sent_tokenize
-from textblob import TextBlob
-from vaderSentiment import vaderSentiment as vader
 
 
 #Boot Up Mongo DB and Read in Collections
@@ -24,13 +21,6 @@ business =          client.yelp.business
 review =            client.yelp.review
 
 
-##Define Functions to Calculate TextBlob and VADER Sentiment Polarity
-def text_blob_sentiment(text):
-    return TextBlob(text).sentiment.polarity
-
-def vader_sentiment(text):
-    text = text.encode("ascii", errors="ignore")
-    return vader.sentiment(text)["compound"]
 
 
 
@@ -77,8 +67,8 @@ restaurants = json.loads(open("data/yelp/restaurants.json","r+").read())["food_p
 
 
 ##Create Dataframes
-#madison = create_sentence_df(review, "Madison, WI", {"state":"WI", "categories": {"$in": restaurants}})                         #Madison, WI
-#pittsburg = create_sentence_df(review, "Pittsburg, PA", {"state": "PA", "categories": {"$in": restaurants}})                    #Pittsburgh, PA
+madison = create_sentence_df(review, "Madison, WI", {"state":"WI", "categories": {"$in": restaurants}})                         #Madison, WI
+pittsburg = create_sentence_df(review, "Pittsburg, PA", {"state": "PA", "categories": {"$in": restaurants}})                    #Pittsburgh, PA
 charlotte = create_sentence_df(review, "Charlotte, NC", {"state": {"$in": ["NC","SC"]}, "categories": {"$in": restaurants}})    #Charlotte, NC
 #urbana = create_sentence_df(review, "Urbana-Champaign, IL", {"state": "IL", "categories": {"$in": restaurants}})                #Urbana-Champaign, IL
 #phoenix = create_sentence_df(review, "Phoenix, AZ", {"state": "AZ", "categories": {"$in": restaurants}})                        #Phoenix, AZ
@@ -86,8 +76,8 @@ charlotte = create_sentence_df(review, "Charlotte, NC", {"state": {"$in": ["NC",
 
 
 #Pickle Dataframes for Upload onto AWS for Further Analysis
-#madison.to_pickle("data/yelp/dataframes/review_sentences_madison.pkl")
-#pittsburg.to_pickle("data/yelp/dataframes/review_sentences_pittsburgh.pkl")
+madison.to_pickle("data/yelp/dataframes/review_sentences_madison.pkl")
+pittsburg.to_pickle("data/yelp/dataframes/review_sentences_pittsburgh.pkl")
 charlotte.to_pickle("data/yelp/dataframes/review_sentences_charlotte.pkl")
 #urbana.to_pickle("data/yelp/dataframes/review_sentences_urbana.pkl")
 #phoenix.to_pickle("data/yelp/dataframes/review_sentences_phoenix.pkl")
