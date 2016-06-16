@@ -1,12 +1,11 @@
 
 """
-Function to Parse ABSA Data (XML Format) and Return Pandas Dataframes
+(II) Parse ABSA Data (XML Format) and Stack into Single Dataframe
 """
 
 import numpy as np
 import pandas as pd
 import xml.etree.ElementTree as ET
-from collections import defaultdict
 
 
 ##Function to Parse the ABSA2014 Annotated Restaurant Review Data (XML File) and Return a Pandas Dataframe
@@ -27,11 +26,11 @@ def parse_data_2014(xml_path):
                 for opinion in opinions:
                     category = opinion.attrib["category"]
                     
-                    row = {"sentence_id": sentence_id, "text": sentence_text, "category": category} #Create DF Row
+                    row = {"sentence_id": sentence_id, "sentence": sentence_text, "category": category} #Create DF Row
                     container.append(row)                                                           #Add Row to Container
                     
         if row == {}:                                                                               
-            row = {"sentence_id":sentence_id, "text":sentence_text, "category":np.nan}              #If "aspectCategores Node does not exist, set cat=NaN
+            row = {"sentence_id":sentence_id, "sentence":sentence_text, "category":np.nan}              #If "aspectCategores Node does not exist, set cat=NaN
             container.append(row)                                                                   #Add row to container
             
     return pd.DataFrame(container)                                                                  #Convert Container to Pandas DF
@@ -55,11 +54,37 @@ def parse_data_2015(xml_path):
                 for opinion in opinions:                                                            #Iterate through Opinions    
                     category = opinion.attrib["category"]
         
-                    row = {"sentence_id":sentence_id, "text":sentence_text, "category":category}    #Create DF Row
-                    container.append(row)                                                           #Add Row to Container
+                    row = {"sentence_id":sentence_id, "sentence": sentence_text, "category":category}   #Create DF Row
+                    container.append(row)                                                               #Add Row to Container
                 
             except IndexError: #if no opinions associated with text
-                row = {"sentence_id":sentence_id, "text":sentence_text, "category":np.nan}          #Create DF Row
-                container.append(row)                                                               #Add Row to Container
+                row = {"sentence_id":sentence_id, "sentence": sentence_text, "category":np.nan}         #Create DF Row
+                container.append(row)                                                                   #Add Row to Container
                 
     return pd.DataFrame(container)
+
+
+##Function to Parse XML Data and 
+def stack_data(parse_function, xml_path):
+    df = parse_function(xml_path)
+    return pd.concat([absa_data, df], axis=0)
+
+
+##Run Functions
+absa_data = pd.DataFrame()                                                                          #Intitialize Empty Container
+
+absa_data = stack_data(parse_data_2014, "data/ABSA/2014/Restaurants_Train_v2.xml")
+absa_data = stack_data(parse_data_2014, "data/ABSA/2014/restaurants_Trial.xml")
+absa_data = stack_data(parse_data_2014, "data/ABSA/2014/Restaurants_Test_Data_phaseB.xml")
+absa_data = stack_data(parse_data_2015, "data/ABSA/2015/ABSA-15_Restaurants_Train_Final.xml")
+absa_data = stack_data(parse_data_2015, "data/ABSA/2015/ABSA15_Restaurants_Test.xml")
+
+print absa_data.shape
+print absa_data.head(5)
+
+absa_data.to_pickle("data/ABSA/all_absa_data.pkl")                                                  #Pickle Parse ABSA Data
+
+
+
+
+

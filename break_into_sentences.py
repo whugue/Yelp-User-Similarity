@@ -1,8 +1,8 @@
 
 """
-Break Yelp Reviews into Component Sentences (Charlotte, NC): 
-(1) Subset to Only Restaurant Reviews in Charlotte, NC
-(2) Split all reviews into sentences. Output as One Pandas Dataframe
+(I) Break Yelp Reviews into Component Sentences
+    (1) Subset to Only Restaurant Reviews in Charlotte, NC
+    (2) Split all reviews into sentences. Output as One Pandas Dataframe
 """
 
 import json
@@ -68,18 +68,18 @@ restaurants = json.loads(open("data/yelp/restaurants.json","r+").read())["food_p
 madison = create_sentence_df(review, "Madison, WI", {"state":"WI", "categories": {"$in": restaurants}})                         #Madison, WI
 pittsburg = create_sentence_df(review, "Pittsburg, PA", {"state": "PA", "categories": {"$in": restaurants}})                    #Pittsburgh, PA
 charlotte = create_sentence_df(review, "Charlotte, NC", {"state": {"$in": ["NC","SC"]}, "categories": {"$in": restaurants}})    #Charlotte, NC
-#urbana = create_sentence_df(review, "Urbana-Champaign, IL", {"state": "IL", "categories": {"$in": restaurants}})                #Urbana-Champaign, IL
-#phoenix = create_sentence_df(review, "Phoenix, AZ", {"state": "AZ", "categories": {"$in": restaurants}})                        #Phoenix, AZ
-#las_vegas = create_sentence_df(review, "Las Vegas, NV", {"state": "NV", "categories": {"$in": restaurants}})                    #Las Vegas, NV
+urbana = create_sentence_df(review, "Urbana-Champaign, IL", {"state": "IL", "categories": {"$in": restaurants}})                #Urbana-Champaign, IL
+phoenix = create_sentence_df(review, "Phoenix, AZ", {"state": "AZ", "categories": {"$in": restaurants}})                        #Phoenix, AZ
+las_vegas = create_sentence_df(review, "Las Vegas, NV", {"state": "NV", "categories": {"$in": restaurants}})                    #Las Vegas, NV
 
 
 #Pickle Dataframes for Upload onto AWS for Further Analysis
 madison.to_pickle("data/yelp/dataframes/review_sentences_madison.pkl")
 pittsburg.to_pickle("data/yelp/dataframes/review_sentences_pittsburgh.pkl")
 charlotte.to_pickle("data/yelp/dataframes/review_sentences_charlotte.pkl")
-#urbana.to_pickle("data/yelp/dataframes/review_sentences_urbana.pkl")
-#phoenix.to_pickle("data/yelp/dataframes/review_sentences_phoenix.pkl")
-#las_vegas.to_pickle("data/yelp/dataframes/review_sentences_las_vegas.pkl")
+urbana.to_pickle("data/yelp/dataframes/review_sentences_urbana.pkl")
+phoenix.to_pickle("data/yelp/dataframes/review_sentences_phoenix.pkl")
+las_vegas.to_pickle("data/yelp/dataframes/review_sentences_las_vegas.pkl")
 
 
 
