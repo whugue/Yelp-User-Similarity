@@ -3,12 +3,13 @@
 Classify Yelp Review Sentences and Aggregate up to the User Level
 """
 
-##TO DO: tally both meaningful and non-meaningful sentences.
-
 
 import numpy as np
 import pandas as pd
 import pickle
+
+from sklearn.manifold import TSNE
+np.set_printoptions(suppress=True)
 
 
 #Function to Read in Pickled Classifiers 
@@ -32,21 +33,36 @@ def classify_sentences(vectorizer, df, clf, topic):
     return pd.concat([df, p], axis=1)
 
 
-##Function to Create User Level File: Calculate N/% Sentences per Topic
+##Function Aggregate Topic Tagged Sentences to User Level -> Sum up number of sentences by topic, relevant, and total
 def create_user_file(df):
-    topics = ["topic_food","topic_service","topic_ambience","topic_value","total"]
+    topics = ["topic_food", "topic_service", "topic_ambience", "topic_value", "relevant"]
     
     user = df.groupby(by=["location","user_id"], as_index=False)[topics].sum() #Sum Topic Flags up to Location-User Level
     
-    user.sort_values(by="total", inplace=True) 
+    user.sort_values(by="relevant", inplace=True) 
     user.drop_duplicates(keep="last", inplace=True) #De-Duplicate-If one user reviewed in multiple cities, chose large corpus
     
-    user["pct_food"] = user["topic_food"] / user["total"] #Calculate Percentages
-    user["pct_service"] = user["topic_service"] / user["total"]
-    user["pct_ambience"] = user["topic_ambience"] / user["total"]
-    user["pct_value"] = user["topic_value"] / user["total"]
-    
+    user["pct_food"] = user["topic_food"] / user["relevant"]
+    user["pct_service"] = user["topic_service"] / user["relevant"]
+    user["pct_ambience"] = user["topic_ambience"] / user["relevant"]
+    user["pct_value"] = user["topic_value"] / user["relevant"]
+
     return user
+
+
+#Subset Out Noise (e.g. Very Low or High Relevant Sentences)
+def subset_users(df, var, min, max):
+    return df[(df[var] >= min) & (df[var] <= max)]
+
+
+#Calculate tSNE values for Each User to Reduce Dimentions to 2 (for plotting/ clustering)
+def tSNE(df, variables):
+    model = TSNE(n_components=2, random_state=4444)
+
+    reduced = model.fit_transform(df[variables])
+    reduced = pd.DataFrame(reduced, columns=["tSNE_1","tSNE_2"])
+
+    return pd.concat([df, reduced], axis=1)
 
 
 ##Function to Pickle Created Objects
@@ -72,7 +88,8 @@ yelp = read_in_yelp(yelp, "review_sentences_charlotte.pkl")
 yelp = read_in_yelp(yelp, "review_sentences_pittsburgh.pkl")
 yelp = read_in_yelp(yelp, "review_sentences_madison.pkl")
 
-yelp.reset_index(inplace=True, drop=True)   #Reset Index after Stacking
+yelp.reset_index(inplace=True, drop=True)                   #Reset Index after Stacking
+print "Yelp Sentences Read In: ", yelp.shape[0]             #Print Number of Sentences (~1.7M)
 
 
 ##Classify Sentences
@@ -81,16 +98,49 @@ yelp = classify_sentences(binary_vectorizer, yelp, lsvm_food, "topic_food")
 yelp = classify_sentences(binary_vectorizer, yelp, lsvm_service, "topic_service")
 yelp = classify_sentences(binary_vectorizer, yelp, lsvm_ambience, "topic_ambience")
 yelp = classify_sentences(binary_vectorizer, yelp, lsvm_value, "topic_value")
-yelp[]
+
+yelp["relevant"] = yelp[["topic_food", "topic_service", "topic_ambience", "topic_value"]].max(axis=1)   #Create Flag for Topic-Relevant Sentences (total)
+
 
 ##Sum Up to User Level
 print "Aggregating to User Level..."
 user = create_user_file(yelp)
 
+print "Number of Users Classified: ", user.shape[0]
 
-#Pickle
+
+#Pickle User Level File
 print "Pickling User-Level File..."
 save_pickle(user, "yelp_review_user.pkl")
+
+
+#Subset to Only "Prolific" Users
+print "Subsetting to Prolific Yelpers..."
+subset =  subset_users(user, "relevant", 12, 219)
+subset.reset_index(drop=True, inplace=True)
+
+print "Number of Prolific Yelpers: ", subset.shape[0]
+
+
+#Run tSNE
+print "Reducing Dimentions (tSNE)..."
+new = tSNE(subset, ["pct_food","pct_service","pct_ambience","pct_value"])
+
+print new.head(5)
+
+#Pickle File
+#print "Pickling..."
+#save_pickle(subset, "yelp_review_user_tSNE.pkl")
+
+
+
+
+
+
+
+
+
+
 
 
 
