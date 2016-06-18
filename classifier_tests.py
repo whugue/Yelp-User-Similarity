@@ -1,4 +1,12 @@
-
+"""
+(IV) Test Various Topic Text Classification Models to Determine Best Performer:
+    (1) Bernoulli Naive Bayes
+    (2) Multinomial Naive Bayes
+    (3) Random Forest
+    (4) Linear SVM
+    (5) Gradient Boosted Trees (Didn't Run - Took too long and already had performance needed from simpler classifiers)
+    (6) Nonlinear SVM (Didn't Run - Took too long and already had performance needed from simpler classifiers)
+"""
 
 import numpy as np
 import pandas as pd
@@ -24,10 +32,10 @@ ambience = ["ambience","AMBIENCE#GENERAL"]
 value = ["price","FOOD#PRICES","RESTAURANT#PRICES","DRINKS#PRICES"]
 
 topics = ["topic_food","topic_service","topic_ambience","topic_value"]
-absa_data["topic_food"] = -1
-absa_data["topic_service"] = -1
-absa_data["topic_ambience"] = -1 
-absa_data["topic_value"] = -1
+absa_data["topic_food"] = 0
+absa_data["topic_service"] = 0
+absa_data["topic_ambience"] = 0 
+absa_data["topic_value"] = 0
 
 absa_data.ix[absa_data.category.isin(food), "topic_food"] = 1
 absa_data.ix[absa_data.category.isin(service), "topic_service"] = 1
@@ -56,7 +64,7 @@ tfidf_vectorizer = open_vectorizer("tfidf_vectorizer.pkl")
 
 
 ##Train a Specific Classifier Based on a Specific Vectoriation
-def train_clf(vectorizer, classifier, train, test, topic, clfpickle):    
+def train_clf(vectorizer, classifier, train, test, topic):    
     train_X = vectorizer.transform(train["sentence"]).toarray()     #Vectorize Training Features
     test_X = vectorizer.transform(test["sentence"]).toarray()       #Vectorize Testing Feature 
     
@@ -78,52 +86,50 @@ def train_clf(vectorizer, classifier, train, test, topic, clfpickle):
     print cm
     print ""
     
-    #Pickle Trained Classifiers
-    with open(clfpickle, "wb") as f:
-        pickle.dump(clf, f)
-
 
 ##Iterate Through All Topic Spaces
-"""
+
 print "Training Bernoulli Naive Bayes Classifier..."
-train_clf(binary_vectorizer, BernoulliNB(binarize=None), absa_train, absa_test, "topic_food", "clf_bnb_food.pkl")
-train_clf(binary_vectorizer, BernoulliNB(binarize=None), absa_train, absa_test, "topic_service", "clf_bnb_services.pkl")
-train_clf(binary_vectorizer, BernoulliNB(binarize=None), absa_train, absa_test, "topic_ambience", "clf_bnb_ambience.pkl")
-train_clf(binary_vectorizer, BernoulliNB(binarize=None), absa_train, absa_test, "topic_value", "clf_bnb_value.pkl")
+train_clf(binary_vectorizer, BernoulliNB(binarize=None), absa_train, absa_test, "topic_food")
+train_clf(binary_vectorizer, BernoulliNB(binarize=None), absa_train, absa_test, "topic_service")
+train_clf(binary_vectorizer, BernoulliNB(binarize=None), absa_train, absa_test, "topic_ambience")
+train_clf(binary_vectorizer, BernoulliNB(binarize=None), absa_train, absa_test, "topic_value")
+
 
 print "Training Multinomial Naive Bayes Classifier..."
-clf_food = train_clf(count_vectorizer, MultinomialNB(), absa_train, absa_test, "topic_food", "clf_mnb_food.pkl")
-clf_service = train_clf(count_vectorizer, MultinomialNB(), absa_train, absa_test, "topic_service", "clf_mnb_service.pkl")
-clf_ambience = train_clf(count_vectorizer, MultinomialNB(), absa_train, absa_test, "topic_ambience", "clf_mnb_ambience.pkl")
-clf_value = train_clf(count_vectorizer, MultinomialNB(), absa_train, absa_test, "topic_value", "clf_mnb_value.pkl")
+clf_food = train_clf(count_vectorizer, MultinomialNB(), absa_train, absa_test, "topic_food")
+clf_service = train_clf(count_vectorizer, MultinomialNB(), absa_train, absa_test, "topic_service")
+clf_ambience = train_clf(count_vectorizer, MultinomialNB(), absa_train, absa_test, "topic_ambience")
+clf_value = train_clf(count_vectorizer, MultinomialNB(), absa_train, absa_test, "topic_value")
+
 
 print "Training Random Forest Classifier..."
-clf_food = train_clf(binary_vectorizer, RandomForestClassifier(), absa_train, absa_test, "topic_food", "clf_rf_food.pkl")
-clf_service = train_clf(binary_vectorizer, RandomForestClassifier(), absa_train, absa_test, "topic_service", "clf_rf_service.pkl")
-clf_ambience = train_clf(binary_vectorizer, RandomForestClassifier(), absa_train, absa_test, "topic_ambience", "clf_rf_ambience.pkl")
-clf_value = train_clf(binary_vectorizer, RandomForestClassifier(), absa_train, absa_test, "topic_value", "clf_rf_value.pkl")
-"""
+clf_food = train_clf(binary_vectorizer, RandomForestClassifier(), absa_train, absa_test, "topic_food")
+clf_service = train_clf(binary_vectorizer, RandomForestClassifier(), absa_train, absa_test, "topic_service")
+clf_ambience = train_clf(binary_vectorizer, RandomForestClassifier(), absa_train, absa_test, "topic_ambience")
+clf_value = train_clf(binary_vectorizer, RandomForestClassifier(), absa_train, absa_test, "topic_value")
+
 
 print "Training Linear SVM..."
-clf_food = train_clf(binary_vectorizer, LinearSVC(), absa_train, absa_test, "topic_food", "clf_linsvm_food.pkl")
-clf_service = train_clf(binary_vectorizer, LinearSVC(), absa_train, absa_test, "topic_service", "clf_linsvm_service.pkl")
-clf_ambience = train_clf(binary_vectorizer, LinearSVC(), absa_train, absa_test, "topic_ambience", "clf_linsvm_ambience.pkl")
-clf_value = train_clf(binary_vectorizer, LinearSVC(), absa_train, absa_test, "topic_value", "clf_linsvm_value.pkl")
+clf_food = train_clf(binary_vectorizer, LinearSVC(), absa_train, absa_test, "topic_food")
+clf_service = train_clf(binary_vectorizer, LinearSVC(), absa_train, absa_test, "topic_service")
+clf_ambience = train_clf(binary_vectorizer, LinearSVC(), absa_train, absa_test, "topic_ambience")
+clf_value = train_clf(binary_vectorizer, LinearSVC(), absa_train, absa_test, "topic_value")
 
 
 """ Not doing these, they take forever/ error out due to lack of memory, even on EC2
 print "Training Gradient Boosting Classifier..."
-clf_food = train_clf(binary_vectorizer, GradientBoostingClassifier(), absa_train, absa_test, "topic_food", "clf_gbt_food.pkl")
-clf_service = train_clf(binary_vectorizer, GradientBoostingClassifier(), absa_train, absa_test, "topic_service","clf_gbt_service.pkl")
-clf_ambience = train_clf(binary_vectorizer, GradientBoostingClassifier(), absa_train, absa_test, "topic_ambience", "clf_gbt_ambience.pkl")
-clf_value = train_clf(binary_vectorizer, GradientBoostingClassifier(), absa_train, absa_test, "topic_value", "clf_gbt_value.pkl")
+clf_food = train_clf(binary_vectorizer, GradientBoostingClassifier(), absa_train, absa_test, "topic_food")
+clf_service = train_clf(binary_vectorizer, GradientBoostingClassifier(), absa_train, absa_test, "topic_service")
+clf_ambience = train_clf(binary_vectorizer, GradientBoostingClassifier(), absa_train, absa_test, "topic_ambience")
+clf_value = train_clf(binary_vectorizer, GradientBoostingClassifier(), absa_train, absa_test, "topic_value")
 
 
 print "Training Nonlinear SVM..."
-clf_food = train_clf(binary_vectorizer, SVC(), absa_train, absa_test, "topic_food", "clf_nonsvm_food.pkl")
-clf_service = train_clf(binary_vectorizer, SVC(), absa_train, absa_test, "topic_service", "clf_nonsvm_service.pkl")
-clf_ambience = train_clf(binary_vectorizer, SVC(), absa_train, absa_test, "topic_ambience", "clf_nonsvm_ambience.pkl")
-clf_value = train_clf(binary_vectorizer, SVC(), absa_train, absa_test, "topic_value", "clf_nonsvm_value.pkl")
+clf_food = train_clf(binary_vectorizer, SVC(), absa_train, absa_test, "topic_food")
+clf_service = train_clf(binary_vectorizer, SVC(), absa_train, absa_test, "topic_service")
+clf_ambience = train_clf(binary_vectorizer, SVC(), absa_train, absa_test, "topic_ambience")
+clf_value = train_clf(binary_vectorizer, SVC(), absa_train, absa_test, "topic_value")
 """
 
 
