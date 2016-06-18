@@ -113,7 +113,7 @@ print "Number of Users Classified: ", user.shape[0]
 print "Pickling User-Level File..."
 save_pickle(user, "yelp_review_user.pkl")
 
-
+"""
 #Subset to Only "Prolific" Users
 print "Subsetting to Prolific Yelpers..."
 subset =  subset_users(user, "relevant", 12, 219)
@@ -131,6 +131,7 @@ print new.head(5)
 #Pickle File
 #print "Pickling..."
 #save_pickle(subset, "yelp_review_user_tSNE.pkl")
+"""
 
 
 
