@@ -35,18 +35,13 @@ def classify_sentences(vectorizer, df, clf, topic):
 
 ##Function Aggregate Topic Tagged Sentences to User Level -> Sum up number of sentences by topic, relevant, and total
 def create_user_file(df):
-    topics = ["topic_food", "topic_service", "topic_ambience", "topic_value", "relevant"]
+    topics = ["topic_food", "topic_service", "topic_ambience", "topic_value", "relevant", "total"]
     
     user = df.groupby(by=["location","user_id"], as_index=False)[topics].sum() #Sum Topic Flags up to Location-User Level
     
     user.sort_values(by="relevant", inplace=True) 
     user.drop_duplicates(keep="last", inplace=True) #De-Duplicate-If one user reviewed in multiple cities, chose large corpus
     
-    user["pct_food"] = user["topic_food"] / user["relevant"]
-    user["pct_service"] = user["topic_service"] / user["relevant"]
-    user["pct_ambience"] = user["topic_ambience"] / user["relevant"]
-    user["pct_value"] = user["topic_value"] / user["relevant"]
-
     return user
 
 
@@ -98,8 +93,8 @@ yelp = classify_sentences(binary_vectorizer, yelp, lsvm_food, "topic_food")
 yelp = classify_sentences(binary_vectorizer, yelp, lsvm_service, "topic_service")
 yelp = classify_sentences(binary_vectorizer, yelp, lsvm_ambience, "topic_ambience")
 yelp = classify_sentences(binary_vectorizer, yelp, lsvm_value, "topic_value")
-
 yelp["relevant"] = yelp[["topic_food", "topic_service", "topic_ambience", "topic_value"]].max(axis=1)   #Create Flag for Topic-Relevant Sentences (total)
+yelp["total"] = 1
 
 
 ##Sum Up to User Level
@@ -112,26 +107,6 @@ print "Number of Users Classified: ", user.shape[0]
 #Pickle User Level File
 print "Pickling User-Level File..."
 save_pickle(user, "yelp_review_user.pkl")
-
-"""
-#Subset to Only "Prolific" Users
-print "Subsetting to Prolific Yelpers..."
-subset =  subset_users(user, "relevant", 12, 219)
-subset.reset_index(drop=True, inplace=True)
-
-print "Number of Prolific Yelpers: ", subset.shape[0]
-
-
-#Run tSNE
-print "Reducing Dimentions (tSNE)..."
-new = tSNE(subset, ["pct_food","pct_service","pct_ambience","pct_value"])
-
-print new.head(5)
-
-#Pickle File
-#print "Pickling..."
-#save_pickle(subset, "yelp_review_user_tSNE.pkl")
-"""
 
 
 
