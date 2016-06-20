@@ -35,36 +35,18 @@ def classify_sentences(vectorizer, df, clf, topic):
 
 ##Function Aggregate Topic Tagged Sentences to User Level -> Sum up number of sentences by topic, relevant, and total
 def create_user_file(df):
-    topics = ["topic_food", "topic_service", "topic_ambience", "topic_value", "relevant", "total"]
-    
-    user = df.groupby(by=["location","user_id"], as_index=False)[topics].sum() #Sum Topic Flags up to Location-User Level
-    
-    user.sort_values(by="relevant", inplace=True) 
-    user.drop_duplicates(keep="last", inplace=True) #De-Duplicate-If one user reviewed in multiple cities, chose large corpus
-    
-    return user
+    return df.groupby(by="user_id", as_index=False)["topic_food","topic_service","topic_ambience","topic_value","relevant","total"].sum()
 
+    #Since we aren't looking at distribution across space to figure out similar users, no need to do this:
+    #user = df.groupby(by=["location","user_id"], as_index=False)[topics].sum() #Sum Topic Flags up to Location-User Level
+    #user.sort_values(by="relevant", inplace=True) 
+    #user.drop_duplicates(subset="user_id", keep="last", inplace=True)
+    #return user
 
-#Subset Out Noise (e.g. Very Low or High Relevant Sentences)
-def subset_users(df, var, min, max):
-    return df[(df[var] >= min) & (df[var] <= max)]
-
-
-#Calculate tSNE values for Each User to Reduce Dimentions to 2 (for plotting/ clustering)
-def tSNE(df, variables):
-    model = TSNE(n_components=2, random_state=4444)
-
-    reduced = model.fit_transform(df[variables])
-    reduced = pd.DataFrame(reduced, columns=["tSNE_1","tSNE_2"])
-
-    return pd.concat([df, reduced], axis=1)
-
-
-##Function to Pickle Created Objects
-def save_pickle(item, path):
-    with open(path, "wb") as f:
+##Function to Pickle Objects for Further Analysis:
+def save_pickle(item, outpath):
+    with open(outpath, "wb") as f:
         pickle.dump(item, f)
-
 
 
 ##Run Functions
@@ -82,9 +64,11 @@ yelp = pd.DataFrame()
 yelp = read_in_yelp(yelp, "review_sentences_charlotte.pkl")
 yelp = read_in_yelp(yelp, "review_sentences_pittsburgh.pkl")
 yelp = read_in_yelp(yelp, "review_sentences_madison.pkl")
+yelp.reset_index(inplace=True, drop=True)                                   #Reset Index after Stacking
 
-yelp.reset_index(inplace=True, drop=True)                   #Reset Index after Stacking
-print "Yelp Sentences Read In: ", yelp.shape[0]             #Print Number of Sentences (~1.7M)
+print "Total Number of Yelp Users:     ", yelp["user_id"].nunique()         #Print Number of Users in Yelp Masterfile
+print "Total Number of Yelp Reviews:   ", yelp["review_id"].nunique()       #Print Number of Reviews in Yelp Masterfile
+print "Total Number of Yelp Sentences: ", yelp.shape[0]                     #Print Number of Sentences in Yelp Masterfile
 
 
 ##Classify Sentences
@@ -101,7 +85,7 @@ yelp["total"] = 1
 print "Aggregating to User Level..."
 user = create_user_file(yelp)
 
-print "Number of Users Classified: ", user.shape[0]
+print "Size of User-Level File: ", user.shape[0]
 
 
 #Pickle User Level File
