@@ -25,10 +25,10 @@ You can read a description of this project on my blog [here](http://www.huguedat
 ### Data:
 The analysis uses two data sources:
 
-1. Restaurant review data collected by the International Workshop on Semantic Evaluation (SemEval), split out by sentence with each sentence labeled by topic (food, service, ambience, value, etc.). Parsed SemEval data is saved as a pandas dataframe here: ("/deck")
+1. Restaurant review data collected by the International Workshop on Semantic Evaluation (SemEval), split out by sentence with each sentence labeled by topic (food, service, ambience, value, etc.). The raw SemEval data are saved in XML Files in the *data/SemEval/2014/* and *data/SemEval/2015/* folders.
+Parsed and compiled SemEval data are saved as a pickled pandas dataframe here: *data/all_semeval_data.pkl*.
 
 2. Yelp review data from the Yelp academic dataset. These data aren't included into this repo, but can be downloaded [here](https://www.yelp.com/dataset_challenge). Before running any of the below scripts, you'll need to [install mongoDB and PyMongo](https://docs.mongodb.com/manual/installation/) and load the Yelp JSON data into it using the following commands:
-
 
 ```
 mongoimport --db yelp --collection business yelp_academic_dataset_business.json
