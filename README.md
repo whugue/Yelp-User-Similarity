@@ -2,7 +2,7 @@
 
 Large online review sites such as Yelp or TripAdvisor have tens or hundreds of millions of reviewers; as such, it can be difficult to find relevant reviews written by people who care about the same things you do. For my final Metis project, I combined supervised and unsupervised machine learning techniques to segment Yelp users based on topics most commonly discussed in their Yelp reviews.
 
-You can read a description of this project on my blog [here](http://www.huguedata.com/2016/04/28/oscar-bait-a-scientific-investigation/)
+You can read a description of this project on my blog [here](http://www.huguedata.com/2016/04/28/oscar-bait-a-scientific-investigation/).
 
 
 ### Code Dependencies
@@ -48,5 +48,5 @@ mongoimport --db yelp --collection review yelp_academic_dataset_review.json
 
 
 ### Presentation:
-*deck/*: Deck from final presentation given at Metis on 6/23/2016
+*deck/*: Deck from final presentation given at Metis on 6/23/2016.
 
