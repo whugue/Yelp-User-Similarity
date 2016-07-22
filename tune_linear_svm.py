@@ -19,7 +19,7 @@ with open("binary_vectorizer.pkl") as f:
     
 
 ##Read In and Clean ABSA Data - Create Binary Flags for Topics & Aggregate to Sentence Level
-absa_data = pd.read_pickle("all_absa_data.pkl")
+semeval_data = pd.read_pickle("all_semeval_data.pkl")
 
 food = ["food","FOOD#QUALITY","FOOD#STYLE_OPTIONS","DRINKS#QUALITY","DRINKS#STYLE_OPTIONS","FOOD#GENERAL"]
 service = ["service","SERVICE#GENERAL"]
@@ -27,20 +27,20 @@ ambience = ["ambience","AMBIENCE#GENERAL"]
 value = ["price","FOOD#PRICES","RESTAURANT#PRICES","DRINKS#PRICES"]
 
 topics = ["topic_food","topic_service","topic_ambience","topic_value"]
-absa_data["topic_food"] = 0
-absa_data["topic_service"] = 0
-absa_data["topic_ambience"] = 0 
-absa_data["topic_value"] = 0
+semeval_data["topic_food"] = 0
+semeval_data["topic_service"] = 0
+semeval_data["topic_ambience"] = 0 
+semeval_data["topic_value"] = 0
 
-absa_data.ix[absa_data.category.isin(food), "topic_food"] = 1
-absa_data.ix[absa_data.category.isin(service), "topic_service"] = 1
-absa_data.ix[absa_data.category.isin(ambience), "topic_ambience"] = 1
-absa_data.ix[absa_data.category.isin(value), "topic_value"] = 1
-absa_data = absa_data.groupby(by="sentence", as_index=False)[topics].max()
+semeval_data.ix[absa_data.category.isin(food), "topic_food"] = 1
+semeval_data.ix[absa_data.category.isin(service), "topic_service"] = 1
+semeval_data.ix[absa_data.category.isin(ambience), "topic_ambience"] = 1
+semeval_data.ix[absa_data.category.isin(value), "topic_value"] = 1
+semeval_data = absa_data.groupby(by="sentence", as_index=False)[topics].max()
 
 
 ##Test Train Split
-absa_train, absa_test = train_test_split(absa_data, test_size=0.25, random_state=4444)
+semeval_train, semeval_test = train_test_split(semeval_data, test_size=0.25, random_state=4444)
 
 
 ##Function to Hypertune Linear SVM Parameters on Training Set
@@ -80,18 +80,18 @@ def pickle_clf(clf, outpickle):
 
 ##Run Functions
 print "Grid Searching for Optimal Parameters..."
-lsvm_food = tune_linear_svm(binary_vectorizer, absa_train, "topic_food") 
-lsvm_service = tune_linear_svm(binary_vectorizer, absa_train, "topic_service")
-lsvm_ambience = tune_linear_svm(binary_vectorizer, absa_train, "topic_ambience")
-lsvm_value = tune_linear_svm(binary_vectorizer, absa_train, "topic_value")
+lsvm_food = tune_linear_svm(binary_vectorizer, semeval_train, "topic_food") 
+lsvm_service = tune_linear_svm(binary_vectorizer, semeval_train, "topic_service")
+lsvm_ambience = tune_linear_svm(binary_vectorizer, semeval_train, "topic_ambience")
+lsvm_value = tune_linear_svm(binary_vectorizer, semeval_train, "topic_value")
 print ""
 
 ##Print Final Statistics:
 print "Tuned Linear SVM Statistics..."
-final_test_stats(binary_vectorizer, absa_test, lsvm_food, "topic_food")
-final_test_stats(binary_vectorizer, absa_test, lsvm_service, "topic_service")
-final_test_stats(binary_vectorizer, absa_test, lsvm_ambience, "topic_ambience")
-final_test_stats(binary_vectorizer, absa_test, lsvm_value, "topic_value")
+final_test_stats(binary_vectorizer, semeval_test, lsvm_food, "topic_food")
+final_test_stats(binary_vectorizer, semeval_test, lsvm_service, "topic_service")
+final_test_stats(binary_vectorizer, semeval_test, lsvm_ambience, "topic_ambience")
+final_test_stats(binary_vectorizer, semeval_test, lsvm_value, "topic_value")
 
 
 #Pickle Clasifiers

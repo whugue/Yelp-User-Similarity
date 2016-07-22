@@ -1,6 +1,6 @@
 
 """
-(II) Parse ABSA Data (XML Format) and Stack into Single Dataframe
+(II) Parse SemEval Data (XML Format) and Stack into Single Dataframe
 """
 
 import numpy as np
@@ -73,16 +73,16 @@ def stack_data(parse_function, xml_path):
 ##Run Functions
 absa_data = pd.DataFrame()                                                                          #Intitialize Empty Container
 
-absa_data = stack_data(parse_data_2014, "data/ABSA/2014/Restaurants_Train_v2.xml")
-absa_data = stack_data(parse_data_2014, "data/ABSA/2014/restaurants_Trial.xml")
-absa_data = stack_data(parse_data_2014, "data/ABSA/2014/Restaurants_Test_Data_phaseB.xml")
-absa_data = stack_data(parse_data_2015, "data/ABSA/2015/ABSA-15_Restaurants_Train_Final.xml")
-absa_data = stack_data(parse_data_2015, "data/ABSA/2015/ABSA15_Restaurants_Test.xml")
+absa_data = stack_data(parse_data_2014, "data/SemEval/2014/Restaurants_Train_v2.xml")
+absa_data = stack_data(parse_data_2014, "data/SemEval/2014/restaurants_Trial.xml")
+absa_data = stack_data(parse_data_2014, "data/SemEval/2014/Restaurants_Test_Data_phaseB.xml")
+absa_data = stack_data(parse_data_2015, "data/SemEval/2015/ABSA-15_Restaurants_Train_Final.xml")
+absa_data = stack_data(parse_data_2015, "data/SemEval/2015/ABSA15_Restaurants_Test.xml")
 
 print absa_data.shape
 print absa_data.head(5)
 
-absa_data.to_pickle("data/ABSA/all_absa_data.pkl")                                                  #Pickle Parse ABSA Data
+absa_data.to_pickle("data/SemEval/all_semeval_data.pkl")                                             #Pickle Parse ABSA Data
 
 
 
