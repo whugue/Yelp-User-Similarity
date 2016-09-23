@@ -37,16 +37,15 @@ mongoimport --db yelp --collection review yelp_academic_dataset_review.json
 
 
 ### Python Scripts, IPython Notebooks, and Program Flows:
-1. *break_yelp_into_sentences.py*: Subset Yelp reviews into U.S. restaurant reviews and split into sentences (Split Yelp reviews out into sentences with one row/document per sentence.
-2. *parse_semeval_data.py*: Parse raw SemEval data (XML format) into pandas dataframe.
-3. *vectorizers.py*: Fit binary, count, and TF-IDF vectorizers to entire vocubulary from SemEval and Yelp data.
-4. *train_classifiers.py*: Train text classifiers on SemEval data and test performance.
-5. *tune_linear_svm.py*: Tune hyperparameters for best performing text classifier from (4) (Linear SVM).
-6. *create_user_file.py*: Predict topics in Yelp review sentences and aggregate to the user level.
-7. *Yelp-Cluster.ipynb*: Cluster Yelp users based on topics most discussed in reviews.
-8. *Yelp-Viz.ipynb*: Produce final visualizations for presentation.
+1. *01-Break-Yelp-Into-Sentences.py*: Subset Yelp reviews into U.S. restaurant reviews and split into sentences (Split Yelp reviews out into sentences with one row/document per sentence.
+2. *02-Parse-SemEval-Data.py*: Parse raw SemEval data (XML format) into pandas dataframe.
+3. *03-Vectorizers.py*: Fit binary, count, and TF-IDF vectorizers to entire vocubulary from SemEval and Yelp data.
+4. *04-Train-Classifiers.py*: Train text classifiers on SemEval data and test performance.
+5. *05-Tune-Linear-SVM.py*: Tune hyperparameters for best performing text classifier from (4) (Linear SVM).
+6. *06-Create-User-File.py*: Predict topics in Yelp review sentences and aggregate to the user level.
+7. *07-Yelp-Cluster.ipynb*: Cluster Yelp users based on topics most discussed in reviews.
+8. *08-Yelp-Viz.ipynb*: Produce final visualizations for presentation.
 
 
 ### Presentation:
 *deck/*: Deck from final presentation given at Metis on 6/23/2016.
-
