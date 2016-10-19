@@ -6,12 +6,12 @@ You can read a full analysis on [my blog](http://www.huguedata.com/2016/07/15/ye
 
 
 ### Program Flow
-The table below provides a brief description of each analysis script, in the order they should be run for analysis. More information (including specific input/ouput data) can be found in each script's header.
+The table below provides high-level overviews of what each analysis script does. More information (including specific input/ouput data) can be found in each script's header.
 
 Program 	| Description | 
 ----------- | ----------- |
+01-Preprocess-Yelp-Data.py | Clean raw Yelp data and split into sentences so that 1 record = 1 review sentence.
 02-Parse-SemEval-Data.py | Parse raw SemEval data (XML format) into pandas dataframe.
-01-Preprocess-Yelp-Data.py | Filter Yelp Academic Dataset to only restaurant reviews from Charlotte NC, Madison WI, and Pittsburgh PA. Split reviews into sentences so that 1 record = 1 review sentence.
 03-Vectorizers.py | Fit binary, count, and TF-IDF vectorizers to entire vocubulary from SemEval and Yelp data.
 04-Train-Classifiers.py | Train text classifiers on SemEval data and test performance.
 05-Tune-Linear-SVM.py | Tune hyperparameters for best performing text classifier from (4) (Linear SVM).
