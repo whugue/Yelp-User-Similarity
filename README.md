@@ -9,7 +9,7 @@ You can read a description of this project on my blog [here](http://www.huguedat
 
 Program | Purpose | Inputs | Outputs
 ------- | ------- | ------ | -------
-01-Preprocess-Yelp-Data.py | Filter and Split | Business & Review MongoDB Collections | Lots of output and stuf: 1. as 2. a 3. list
+01-Preprocess-Yelp-Data.py | Subset Yelp reviews into U.S. restaurant reviews and split into sentences (with 1 row = 1 sentence) | Business & Review MongoDB Collections | * DF 1 * DF2 * DF 3
 
 First Header | Second Header
 ------------ | -------------
