@@ -10,7 +10,6 @@ The table below provides a brief description of each analysis script, in the ord
 
 Program 	| Description | 
 ----------- | ----------- |
-01-Preprocess-Yelp-Data.py | Filter Yelp Academic Dataset to only restaurant reviews from Charlotte NC, Madison WI, and Pittsburgh PA. Split reviews into sentences so that 1 record = 1 review sentence.
 02-Parse-SemEval-Data.py | Parse raw SemEval data (XML format) into pandas dataframe.
 03-Vectorizers.py | Fit binary, count, and TF-IDF vectorizers to entire vocubulary from SemEval and Yelp data.
 04-Train-Classifiers.py | Train text classifiers on SemEval data and test performance.
