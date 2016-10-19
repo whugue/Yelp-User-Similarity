@@ -1,7 +1,15 @@
 
 """
-(II) Parse SemEval Data (XML Format) and Stack into Single Dataframe
+Script:     02-Parse-SemEval-Data.py
+Purpose:    Parse raw SemEval data (XML format) into pandas dataframes.
+Input:      data/SemEval/2014/Restaurants_Train_v2.xml
+            data/SemEval/2014/restaurants_Trial.xml
+            data/SemEval/2014/Restaurants_Test_Data_phaseB.xml
+            data/SemEval/2015/ABSA-15_Restaurants_Train_Final.xml
+            data/SemEval/2015/ABSA15_Restaurants_Test.xml
+Output:     data/SemEval/all_semeval_data.pkl (pickled pandas dataframe)
 """
+
 
 import numpy as np
 import pandas as pd

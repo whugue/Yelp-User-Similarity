@@ -1,12 +1,13 @@
 """
-(IV) Test Various Topic Text Classification Models to Determine Best Performer:
-    (1) Bernoulli Naive Bayes
-    (2) Multinomial Naive Bayes
-    (3) Random Forest
-    (4) Linear SVM
-    (5) Gradient Boosted Trees (Didn't Run - Took too long and already had performance needed from simpler classifiers)
-    (6) Nonlinear SVM (Didn't Run - Took too long and already had performance needed from simpler classifiers)
+Script:     04-Train-Classifiers.py
+Purpose:    Train various supervised text clasisifcaiton models and determine best overall performer
+Input:      data/SemEval/all_semeval_data.pkl
+            data/vectorizers/binary_vectorizer.pkl
+            data/vectorizers/count_vectorizer.pkl //TODO: Save to GH Repo
+            data/vectorizers/tfidf_vectorizer.pkl //TODO: Save to GH Repo
+Output:     Various performance statistics // TODO: Output these to some sort of graphic, not just as printed output 
 """
+
 
 import numpy as np
 import pandas as pd
@@ -20,12 +21,13 @@ from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
 from sklearn.svm import LinearSVC, SVC
 from sklearn.metrics import accuracy_score, confusion_matrix
 
-##Read in ABSA Data
-semeval_data = pd.read_pickle("all_semeval_data.pkl")
+
+##Read in SemEval Data
+semeval_data = pd.read_pickle("data/SemEval/all_semeval_data.pkl")
 #semeval_data.category.value_counts(dropna=False)
 
 
-##Clean ABSA Data - Create Binary Flags for Topics & Aggregate to Sentence Levle
+##Clean SemEval Data - Create Binary Flags for Topics & Aggregate to Sentence Levle
 food = ["food","FOOD#QUALITY","FOOD#STYLE_OPTIONS","DRINKS#QUALITY","DRINKS#STYLE_OPTIONS","FOOD#GENERAL"]
 service = ["service","SERVICE#GENERAL"]
 ambience = ["ambience","AMBIENCE#GENERAL"]
@@ -58,9 +60,9 @@ def open_vectorizer(inpickle):
 
     return vectorizer
 
-binary_vectorizer = open_vectorizer("binary_vectorizer.pkl")
-count_vectorizer = open_vectorizer("count_vectorizer.pkl")
-tfidf_vectorizer = open_vectorizer("tfidf_vectorizer.pkl")
+binary_vectorizer = open_vectorizer("data/vectorizers/binary_vectorizer.pkl")
+count_vectorizer = open_vectorizer("data/vectorizers/count_vectorizer.pkl")
+tfidf_vectorizer = open_vectorizer("data/vectorizers/tfidf_vectorizer.pkl")
 
 
 ##Train a Specific Classifier Based on a Specific Vectoriation
@@ -117,7 +119,7 @@ clf_value = train_clf(binary_vectorizer, LinearSVC(), semeval_train, semeval_tes
 
 
 """
-Not doing these, they take forever/ error out due to lack of memory, even on EC2
+Not doing these, they take forever/ error out due to lack of memory (even on EC2) and have good performance w/ Linear SVM
 print "Training Gradient Boosting Classifier..."
 clf_food = train_clf(binary_vectorizer, GradientBoostingClassifier(), semeval_train, semeval_test, "topic_food")
 clf_service = train_clf(binary_vectorizer, GradientBoostingClassifier(), semeval_train, semeval_test, "topic_service")

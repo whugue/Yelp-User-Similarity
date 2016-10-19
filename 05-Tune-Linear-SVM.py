@@ -1,5 +1,13 @@
 """
-(V) Hypertune Linear SVM (Best Performing Classifer) & Output Final Classifiers (one per topic) and Print Final Classifier Statistics 
+Script:     05-Tune-Linear-SVM.py
+Purpose:    Hypertune Linear SVM (Best Performing Classifer) & Output Final Classifiers;
+			Print Final Classifier Statistics // TODO: Build hyperparemeter tuning into model selection from (04)
+Input:      data/SemEval/all_semeval_data.pkl
+            data/vectorizers/binary_vectorizer.pkl
+Output:     data/classifiers/lsvm_food.pkl
+			data/classifiers/lsvm_service.pkl
+			data/classifiers/lsvm_ambience.pkl
+			data/classifiers/lsvm_value.pkl
 """
 
 import numpy as np
@@ -14,7 +22,7 @@ from sklearn.metrics import accuracy_score, precision_score, recall_score, confu
 
 
 ##Read in Binary Text Vectorizer
-with open("binary_vectorizer.pkl") as f:
+with open("data/vectorizers/binary_vectorizer.pkl") as f:
     binary_vectorizer = pickle.load(f)
     
 
@@ -72,6 +80,7 @@ def final_test_stats(vectorizer, test, clf, topic):
 	print confusion_matrix(test_y, clf.predict(test_X))
 	print ""
 
+
 ##Function to Pickle Classifiers for Future Analysis
 def pickle_clf(clf, outpickle):
 	with open(outpickle, "wb") as f:
@@ -96,10 +105,10 @@ final_test_stats(binary_vectorizer, semeval_test, lsvm_value, "topic_value")
 
 #Pickle Clasifiers
 print "Pickling Classifiers..."
-pickle_clf(lsvm_food, "lsvm_food.pkl")
-pickle_clf(lsvm_service, "lsvm_service.pkl")
-pickle_clf(lsvm_ambience, "lsvm_ambience.pkl")
-pickle_clf(lsvm_value, "lsvm_value.pkl")
+pickle_clf(lsvm_food, "data/classifiers/lsvm_food.pkl")
+pickle_clf(lsvm_service, "data/classifiers/lsvm_service.pkl")
+pickle_clf(lsvm_ambience, "data/classifiers/lsvm_ambience.pkl")
+pickle_clf(lsvm_value, "data/classifiers/lsvm_value.pkl")
 
 
 

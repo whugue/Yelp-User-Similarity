@@ -1,5 +1,13 @@
 """
-(III) Fit Vectorizers on Entire Corpus of ABSA & Yelp Review Data
+Script:     03-Vectorizer.py
+Purpose:    Fit vectorizers on entire vocabulary from SemEval + Yelp
+Input:   	data/SemEval/all_absa_data.pkl
+			data/yelp/dataframes/review_sentences_charlotte.pkl
+			data/yelp/dataframes/review_sentences_madison.pkl
+			data/yelp/dataframes/review_sentences_pittsburgh.pkl (Pandas dataframes)
+Output:     data/vectorizers/binary_vectorizer.pkl
+			data/vectorizers/count_vectorizer.pkl
+			data/vectorizers/tfidf_vectorizer.pkl (sklearn vectorizer objects)
 """
 
 import numpy as np
@@ -70,13 +78,13 @@ print ""
 
 #Pickle Vectorizers
 print "Pickling Binary Vectorizer..."
-pickle_vectorizer(binary_vectorizer, "binary_vectorizer.pkl")
+pickle_vectorizer(binary_vectorizer, "data/vectorizers/binary_vectorizer.pkl")
 
 print "Pickling Count Vectorizer..."
-pickle_vectorizer(count_vectorizer, "count_vectorizer.pkl")
+pickle_vectorizer(count_vectorizer, "data/vectorizers/count_vectorizer.pkl")
 
 print "Pickling TF-IDF Vectorizer..."
-pickle_vectorizer(tfidf_vectorizer, "tfidf_vectorizer.pkl")
+pickle_vectorizer(tfidf_vectorizer, "data/vectorizers/tfidf_vectorizer.pkl")
 
 
 

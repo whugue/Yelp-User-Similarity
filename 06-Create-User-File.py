@@ -1,6 +1,16 @@
 
 """
-Classify Yelp Review Sentences and Aggregate up to the User Level
+Script:     06-Create-User-File.py
+Purpose:    Classify each Yelp Review sentence by topic and aggregate to User level     
+Input:      data/vectorizers/binary_vectorizer.pkl (pickled sklearn vectorizer object)
+            data/classifiers/lsvm_food.pkl
+            data/classifiers/lsvm_service.pkl
+            data/classifiers/lsvm_ambience.pkl
+            data/classifiers/lsvm_value.pkl (pickled sklean classifier objects)
+            data/yelp/dataframes/review_sentences_charlotte.pkl
+            data/yelp/dataframes/review_sentences_pittsburgh.pkl
+            data/yelp/dataframes/review_sentences_madison.pkl (Yelp Review Data as pickled pandas DFs)
+Output:     data/yelp/dataframes/yelp_review_user.pkl (User-level data as pickled pandas DF)
 """
 
 
@@ -37,11 +47,6 @@ def classify_sentences(vectorizer, df, clf, topic):
 def create_user_file(df):
     return df.groupby(by="user_id", as_index=False)["topic_food","topic_service","topic_ambience","topic_value","relevant","total"].sum()
 
-    #Since we aren't looking at distribution across space to figure out similar users, no need to do this:
-    #user = df.groupby(by=["location","user_id"], as_index=False)[topics].sum() #Sum Topic Flags up to Location-User Level
-    #user.sort_values(by="relevant", inplace=True) 
-    #user.drop_duplicates(subset="user_id", keep="last", inplace=True)
-    #return user
 
 ##Function to Pickle Objects for Further Analysis:
 def save_pickle(item, outpath):
@@ -51,19 +56,20 @@ def save_pickle(item, outpath):
 
 ##Run Functions
 print "Reading In Vectorizer and Classifiers..."
-binary_vectorizer = open_pickle("binary_vectorizer.pkl")
-lsvm_food = open_pickle("lsvm_food.pkl")
-lsvm_service = open_pickle("lsvm_service.pkl")
-lsvm_ambience = open_pickle("lsvm_ambience.pkl")
-lsvm_value = open_pickle("lsvm_value.pkl")
+binary_vectorizer = open_pickle("data/vectorizers/binary_vectorizer.pkl")
+
+lsvm_food = open_pickle("data/classifiers/lsvm_food.pkl")
+lsvm_service = open_pickle("data/classifiers/lsvm_service.pkl")
+lsvm_ambience = open_pickle("data/classifiers/lsvm_ambience.pkl")
+lsvm_value = open_pickle("data/classifiers/lsvm_value.pkl")
 
 
 ##Initalize Container for Yelp Data (Pandas DF)
 print "Reading in Yelp Review Data..."
 yelp = pd.DataFrame()
-yelp = read_in_yelp(yelp, "review_sentences_charlotte.pkl")
-yelp = read_in_yelp(yelp, "review_sentences_pittsburgh.pkl")
-yelp = read_in_yelp(yelp, "review_sentences_madison.pkl")
+yelp = read_in_yelp(yelp, "data/yelp/dataframes/review_sentences_charlotte.pkl")
+yelp = read_in_yelp(yelp, "data/yelp/dataframes/review_sentences_pittsburgh.pkl")
+yelp = read_in_yelp(yelp, "data/yelp/dataframes/review_sentences_madison.pkl")
 yelp.reset_index(inplace=True, drop=True)                                   #Reset Index after Stacking
 
 print "Total Number of Yelp Users:     ", yelp["user_id"].nunique()         #Print Number of Users in Yelp Masterfile
@@ -90,7 +96,7 @@ print "Size of User-Level File: ", user.shape[0]
 
 #Pickle User Level File
 print "Pickling User-Level File..."
-save_pickle(user, "yelp_review_user.pkl")
+save_pickle(user, "data/yelp/dataframes/yelp_review_user.pkl")
 
 
 
