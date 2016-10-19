@@ -5,21 +5,19 @@ Large online review sites such as Yelp or TripAdvisor have tens or hundreds of m
 You can read a description of this project on my blog [here](http://www.huguedata.com/2016/07/15/yelp-me-out/).
 
 
+### Program Flow
+
+First Header | Second Header
+------------ | -------------
+Content from cell 1 | Content from cell 2
+Content in the first column | Content in the second column
+
+
+
+
 ### Code Dependencies
-* Numpy
-* Pandas
-* Sklearn
-* Matplotlib
-* Seaborn
-* PyLab
-* Pickle
-* Xml
-* Json
-* Bson
-* Collections
-* NLTK
-* MongoDB and PyMongo
-* Warnings
+Numpy, Pandas, Sci-Kit Learn, Matplotlib, Seaborn, PyLab, Pickle
+Xml, Json, Collections, NLTK, MongoDB and PyMongo, Warnings
 
 
 ### Data:
