@@ -1,14 +1,14 @@
 
 """
-Script:     05-Preprocess-Yelp-Data.py
+Script:     01-Preprocess-Yelp-Data.py
 Purpose:    (a) Filter Yelp Academic Dataset to Only Restaurants Reviews in Charlotte NC, Madison WI, and Pittsburgh PA
             (b) Break review data into component sentences so 1 record = 1 sentence
-Input:      Business and Review MongoDB Collections (see README for more info on how to create these collections)
+Input:      Business and Review MongoDB Collections 
+            (see data/README.md for more info on how to load the raw Yelp data into Mongo)
 Output:     data/yelp/dataframes/review_sentences_madison.pkl
             data/yelp/dataframes/review_sentences_pittsburgh.pkl
             data/yelp/dataframes/review_sentences_charlotte.pkl (Pandas Dataframes)
 """
-
 
 import json
 from collections import defaultdict
@@ -64,7 +64,8 @@ def create_sentence_df(in_collection, location, mongo_query):
 
 
 
-##Run Functions!
+##This JSON file contains a list of all Yelp business categories considered as "restaurants for this analysis."
+##These categories were derived by hand from a list of all possible business categories in the raw Yelp data
 restaurants = json.loads(open("data/yelp/restaurants.json","r+").read())["food_places"]
 
 
