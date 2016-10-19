@@ -1,9 +1,14 @@
 
 """
-(I) Break Yelp Reviews into Component Sentences
-    (1) Subset to Only Restaurant Reviews in Charlotte, NC
-    (2) Split all reviews into sentences. Output as One Pandas Dataframe
+Script:     05-Preprocess-Yelp-Data.py
+Purpose:    (a) Filter Yelp Academic Dataset to Only Restaurants Reviews in Charlotte NC, Madison WI, and Pittsburgh PA
+            (b) Break review data into component sentences so 1 record = 1 sentence
+Input:      Business and Review MongoDB Collections (see README for more info on how to create these collections)
+Output:     data/yelp/dataframes/review_sentences_madison.pkl
+            data/yelp/dataframes/review_sentences_pittsburgh.pkl
+            data/yelp/dataframes/review_sentences_charlotte.pkl (Pandas Dataframes)
 """
+
 
 import json
 from collections import defaultdict
@@ -12,7 +17,6 @@ import pandas as pd
 from nltk.tokenize import sent_tokenize
 
 from pymongo import MongoClient
-from bson import Code
 
 
 #Boot Up Mongo DB and Read in Collections
@@ -65,21 +69,15 @@ restaurants = json.loads(open("data/yelp/restaurants.json","r+").read())["food_p
 
 
 ##Create Dataframes
-madison = create_sentence_df(review, "Madison, WI", {"state":"WI", "categories": {"$in": restaurants}})                         #Madison, WI
-pittsburg = create_sentence_df(review, "Pittsburg, PA", {"state": "PA", "categories": {"$in": restaurants}})                    #Pittsburgh, PA
-charlotte = create_sentence_df(review, "Charlotte, NC", {"state": {"$in": ["NC","SC"]}, "categories": {"$in": restaurants}})    #Charlotte, NC
-urbana = create_sentence_df(review, "Urbana-Champaign, IL", {"state": "IL", "categories": {"$in": restaurants}})                #Urbana-Champaign, IL
-phoenix = create_sentence_df(review, "Phoenix, AZ", {"state": "AZ", "categories": {"$in": restaurants}})                        #Phoenix, AZ
-las_vegas = create_sentence_df(review, "Las Vegas, NV", {"state": "NV", "categories": {"$in": restaurants}})                    #Las Vegas, NV
+madison = create_sentence_df(review, "Madison, WI", {"state":"WI", "categories": {"$in": restaurants}})                        
+pittsburg = create_sentence_df(review, "Pittsburg, PA", {"state": "PA", "categories": {"$in": restaurants}})                 
+charlotte = create_sentence_df(review, "Charlotte, NC", {"state": {"$in": ["NC","SC"]}, "categories": {"$in": restaurants}})
 
 
 #Pickle Dataframes for Upload onto AWS for Further Analysis
 madison.to_pickle("data/yelp/dataframes/review_sentences_madison.pkl")
 pittsburg.to_pickle("data/yelp/dataframes/review_sentences_pittsburgh.pkl")
 charlotte.to_pickle("data/yelp/dataframes/review_sentences_charlotte.pkl")
-urbana.to_pickle("data/yelp/dataframes/review_sentences_urbana.pkl")
-phoenix.to_pickle("data/yelp/dataframes/review_sentences_phoenix.pkl")
-las_vegas.to_pickle("data/yelp/dataframes/review_sentences_las_vegas.pkl")
 
 
 
