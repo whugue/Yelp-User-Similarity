@@ -8,7 +8,7 @@ You can read a description of this project on my blog [here](http://www.huguedat
 ### Program Flow
 
 N | Program | Purpose | Inputs | Outputs
-_ | _______ | _______ | ______ | _______
+- | ------- | ------- | ------ | -------
 1 | 01-Preprocess-Yelp-Data.py | Filter and Split | Business & Review MongoDB Collections | Lots of output and stuf: 1. as 2. a 3. list
 
 First Header | Second Header
