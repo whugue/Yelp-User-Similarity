@@ -1,7 +1,7 @@
 ### Metis Final Project: Finding Similar Users on Online Review Sites
 Large online review sites such as Yelp or TripAdvisor have tens or hundreds of millions of reviewers; as such, it can be difficult to find relevant reviews written by people who care about the same things you do. For my final Metis project, I combined supervised and unsupervised machine learning techniques to segment Yelp users based on topics most commonly discussed in their Yelp reviews.
 
-You can read a full analysis on [my blog](http://www.huguedata.com/2016/07/15/yelp-me-out/), or check out the [presentation](https://github.com/whugue/Yelp-User-Similarity/blob/master/deck/Will_Yelp-Final.pdf) I gave at Metis  Career Day on June 23rd, 2016.
+You can read a full analysis on [my blog](http://www.huguedata.com/2016/07/15/yelp-me-out/), or check out the [presentation](https://github.com/whugue/Yelp-User-Similarity/blob/master/deck/Yelp-Final.pdf) I gave at Metis  Career Day on June 23rd, 2016.
 
 
 
