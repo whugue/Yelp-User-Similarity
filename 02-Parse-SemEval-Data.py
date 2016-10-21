@@ -16,7 +16,13 @@ import pandas as pd
 import xml.etree.ElementTree as ET
 
 
-##Function to Parse the ABSA2014 Annotated Restaurant Review Data (XML File) and Return a Pandas Dataframe
+
+"""
+Function to parse the 2014 SenEval annotated restaurant review data (XML File) into a Pandas dataframe
+xml_path:   XML file to parse
+
+RETURNS:    Pandas DF of parsed XML data for NLP model training and validation
+"""
 def parse_data_2014(xml_path):
     container = []                                                                                  #Initialize Container (List) for Parse Data
     sentences = ET.parse(xml_path).getroot()                                                        #Get Sentence-Level Nodes
@@ -44,7 +50,13 @@ def parse_data_2014(xml_path):
     return pd.DataFrame(container)                                                                  #Convert Container to Pandas DF
 
 
-##Function to Parse the ABSA2015 Annotated Restaurant Review Data (XML File) and Return a Pandas Dataframe
+
+"""
+Function to parse the 2015 SenEval annotated restaurant review data (XML File) into a Pandas dataframe
+xml_path:   XML file to parse
+
+RETURNS:    Pandas DF of parsed XML data for NLP model training and validation
+"""
 def parse_data_2015(xml_path):
     container = []                                                                                  #Initialize Container (List) for Parse Data
     reviews = ET.parse(xml_path).getroot()                                                          #Get Review-Level Nodes
@@ -71,14 +83,21 @@ def parse_data_2015(xml_path):
                 
     return pd.DataFrame(container)
 
+"""
+Function to concatentate all SemEval data into a single pandas dataframe
+parse_function: Function to use to parse data into pandas DF (either parse_data_2014 or parse_data_2015)
+xml_path:       XML file to parse
 
-##Function to Parse XML Data and 
+RETURNS:        Pandas DF containing ALL SemEval data from both 2014 and 2015
+"""
+
 def stack_data(parse_function, xml_path):
     df = parse_function(xml_path)
     return pd.concat([absa_data, df], axis=0)
 
 
-##Run Functions
+
+##Parse Data Using Functions above
 absa_data = pd.DataFrame()                                                                          #Intitialize Empty Container
 
 absa_data = stack_data(parse_data_2014, "data/SemEval/2014/Restaurants_Train_v2.xml")
@@ -90,8 +109,9 @@ absa_data = stack_data(parse_data_2015, "data/SemEval/2015/ABSA15_Restaurants_Te
 print absa_data.shape
 print absa_data.head(5)
 
-absa_data.to_pickle("data/SemEval/all_semeval_data.pkl")                                             #Pickle Parse ABSA Data
 
+##Pickle Dataframe for later use
+absa_data.to_pickle("data/SemEval/all_semeval_data.pkl")                                           
 
 
 

@@ -25,7 +25,13 @@ business =          client.yelp.business
 review =            client.yelp.review
 
 
-##Function to get List of all Business IDs for Restaurants in Six U.S. Metropolitan Areas to Analyze
+"""
+Function filter Yelp businesses to only RESTUARANTS in a given city (e.g. Charlotte, NC)
+location:       Location of Yelp Businessed pulled by input mongo_query (e.g. Charlotte, NC)
+mongo_query:    Mongo query to filter all Yelp businesses to ONLY restauarants in a given area
+RETURNS:        List of Business IDs for restaurants in a given city (as specified by input mongo_query)
+"""
+
 def get_business_ids(location, mongo_query):
     print "Returning Business IDs for "+location+"..."
     business_ids = []
@@ -38,7 +44,16 @@ def get_business_ids(location, mongo_query):
     return business_ids
 
 
-##Function to Break Each Review into it's component sentences & calculate TextBlob & VADER sentiment polarity of those sentences
+"""
+Function to break each review into it's compotnent sentences
+
+in_collection:  MongoDB collection containing Yelp review data
+location:       Location of Yelp Businessed pulled by input mongo_query (e.g. Charlotte, NC) (to impliment above function)
+mongo_query:    List of Business IDs for restaurants in a given city (as specified by input mongo_query) (to impliment above function)
+
+RETURNS:        Pandas DF of restaurant reviews for given location, where 1 row = 1 sentence
+"""
+
 def create_sentence_df(in_collection, location, mongo_query):
     print "Creating Cursor for "+location+"..."
     df = []
@@ -64,12 +79,15 @@ def create_sentence_df(in_collection, location, mongo_query):
 
 
 
+
+##Run Above Function to Filter & Clean Yelp Review Data for Analysis
+
 ##This JSON file contains a list of all Yelp business categories considered as "restaurants for this analysis."
 ##These categories were derived by hand from a list of all possible business categories in the raw Yelp data
 restaurants = json.loads(open("data/yelp/restaurants.json","r+").read())["food_places"]
 
 
-##Create Dataframes
+##Filter to Resturant Reviews for [city] and split out into component sentences
 madison = create_sentence_df(review, "Madison, WI", {"state":"WI", "categories": {"$in": restaurants}})                        
 pittsburg = create_sentence_df(review, "Pittsburg, PA", {"state": "PA", "categories": {"$in": restaurants}})                 
 charlotte = create_sentence_df(review, "Charlotte, NC", {"state": {"$in": ["NC","SC"]}, "categories": {"$in": restaurants}})
