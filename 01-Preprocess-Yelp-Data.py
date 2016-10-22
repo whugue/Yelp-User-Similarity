@@ -27,15 +27,13 @@ review =            client.yelp.review
 
 """
 Function filter Yelp businesses to only RESTUARANTS in a given city (e.g. Charlotte, NC)
-location:       Location of Yelp Businessed pulled by input mongo_query (e.g. Charlotte, NC)
-mongo_query:    Mongo query to filter all Yelp businesses to ONLY restauarants in a given area
+location:       Location of Yelp Businessed pulled from MongoDB
+query:          Mongo query to filter all Yelp businesses to ONLY restauarants in a given city
 RETURNS:        List of Business IDs for restaurants in a given city (as specified by input mongo_query)
 """
-
-def get_business_ids(location, mongo_query):
-    print "Returning Business IDs for "+location+"..."
+def get_business_ids(query):
+    print "Filtering Businesses from: ", location
     business_ids = []
-
     cursor = business.find(mongo_query)
 
     for each in cursor:
@@ -46,22 +44,19 @@ def get_business_ids(location, mongo_query):
 
 """
 Function to break each review into it's compotnent sentences
-
-in_collection:  MongoDB collection containing Yelp review data
-location:       Location of Yelp Businessed pulled by input mongo_query (e.g. Charlotte, NC) (to impliment above function)
-mongo_query:    List of Business IDs for restaurants in a given city (as specified by input mongo_query) (to impliment above function)
+location:       Location of Yelp Businessed pulled from MongoDB
+business_ids:   List of Yelp ID for restaurants in given city pulled from MongoDB
 
 RETURNS:        Pandas DF of restaurant reviews for given location, where 1 row = 1 sentence
 """
-
-def create_sentence_df(in_collection, location, mongo_query):
-    print "Creating Cursor for "+location+"..."
-    df = []
-    business_ids=get_business_ids(location, mongo_query)
-    cursor = in_collection.find({"business_id": {"$in": business_ids}})
+def create_sentence_df(location, business_ids):
+    print "Creating Cursor for ", location, "..."
+    cursor = review.find({"business_id": {"$in": business_ids}})
 
     #Split Each Review into it's component sentences with one row = one review sentence
-    print "Spliting Reviews into Sentences for "+location+"..."
+    print "Spliting Reviews into Sentences for ", location, "..."
+
+    df = []
     for review in cursor:
         sentences = sent_tokenize(review["text"])
 
@@ -74,23 +69,28 @@ def create_sentence_df(in_collection, location, mongo_query):
             row["sentence"] = sentence
 
             df.append(row)
-    print "DF Created for: "+location
+
+    print "DF Created for: ", location
     return pd.DataFrame(df)
 
 
 
-
 ##Run Above Function to Filter & Clean Yelp Review Data for Analysis
-
 ##This JSON file contains a list of all Yelp business categories considered as "restaurants for this analysis."
 ##These categories were derived by hand from a list of all possible business categories in the raw Yelp data
 restaurants = json.loads(open("data/yelp/restaurants.json","r+").read())["food_places"]
 
 
 ##Filter to Resturant Reviews for [city] and split out into component sentences
-madison = create_sentence_df(review, "Madison, WI", {"state":"WI", "categories": {"$in": restaurants}})                        
-pittsburg = create_sentence_df(review, "Pittsburg, PA", {"state": "PA", "categories": {"$in": restaurants}})                 
-charlotte = create_sentence_df(review, "Charlotte, NC", {"state": {"$in": ["NC","SC"]}, "categories": {"$in": restaurants}})
+madison_business_ids = get_business_ids({"state":"WI", "categories": {"$in": restaurants}})
+pittsburg_business_ids = get_business_ids({"state": "PA", "categories": {"$in": restaurants}})
+charlotte_busines_ids = get_business_ids({"state": {"$in": ["NC","SC"]}, "categories": {"$in": restaurants}})
+
+
+##Split Reviews out into component sentences
+madison = create_sentence_df("Madison, WI", madison_business_ids                       
+pittsburg = create_sentence_df("Pittsburg, PA", pittsburg_business_ids)                 
+charlotte = create_sentence_df("Charlotte, NC", charlotte_busines_ids)
 
 
 #Pickle Dataframes for Upload onto AWS for Further Analysis

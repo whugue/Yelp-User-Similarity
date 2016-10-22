@@ -16,13 +16,24 @@ import pickle
 from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
 
 
-##Functions to Read in Series of Sentences from ABSA or Yelp Data and Add to Full Text Corpus
+"""
+Function to Read in Series of Sentences from ABSA or Yelp Data and Add to Full Text Corpus
+
+Corpus: 	Previous Yelp & SemEval document corpus
+inpath: 	Text data to add to corpus
+RETURNS:	New corpus with new text data added
+"""
 def add_to_corpus(corpus, inpath):
-	sentences = pd.read_pickle(inpath)["sentence"]
+	sentences = pd.read_pickle(inpath)["sentence"]	
 	return pd.concat([corpus, sentences], axis=0)
 
 
-##Functions to Fit Binary Count, Multinomial Count, and TF-IDF Vectorizers on Entire Corpus Vocabulary
+"""
+Functions to Fit Binary Count, Multinomial Count, and TF-IDF Vectorizers on Entire Corpus Vocabulary
+
+corpus:		Input corpus of documents
+RETURNS:	Vectorizer fit to input corpus
+"""
 def fit_binary_vectorizer(corpus):
 	vectorizer = CountVectorizer(ngram_range=(1,1), min_df=2, max_df=0.2, stop_words="english", token_pattern="\\b[a-z][a-z][a-z]+\\b", binary=True)
 	vectorizer.fit(corpus)
@@ -42,13 +53,21 @@ def fit_tfidf_vectorizer(corpus):
 	return vectorizer
 
 
-##Function to Pickle Vectorizers
+"""
+Function to Pickle Vectorizers
+
+vectorizer:	Vectorizer to be picked
+RETURNS:	Picked vectorizer
+"""
 def pickle_vectorizer(vectorizer, outpickle):
 	with open(outpickle, "wb") as f:
 		pickle.dump(vectorizer, f)
 
 
-##Run Functions
+
+
+
+##Run functions above to train vectorizers
 ##Create Full ABSA+Yelp Corpus
 print "Creating Full Corpus..."
 review_corpus = pd.Series() #Initialize Corpus as Empty Pandas Series
@@ -64,7 +83,7 @@ print "Created Full Corpus of "+str(review_corpus.shape[0])+" sentences."
 print ""
 
 
-##Fit Vectorizers to Corpus
+##Fit Vectorizers
 print "Creating Binary Vectorizer..."
 binary_vectorizer = fit_binary_vectorizer(review_corpus)
 

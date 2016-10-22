@@ -22,33 +22,63 @@ from sklearn.manifold import TSNE
 np.set_printoptions(suppress=True)
 
 
-#Function to Read in Pickled Classifiers 
+
+"""
+Function to Read in Pickled Classifiers 
+
+path:       Path to pickled classifier
+RETURNS:    Deserialized classifer
+"""
 def open_pickle(path):
     with open(path) as f:
         out = pickle.load(f)
     return out
 
 
-##Function to Read in Each Location's Yelp Data and Add to Corpus
+"""
+Function to Stack Yelp data from multiple cities into single pandas DF
+
+base:       Previous Yelp Dataset
+inpath:     New Yelp data to add to corpus
+RETURNS:    Yelp Dataset with new data added
+"""
 def read_in_yelp(base, inpath):
     df = pd.read_pickle(inpath)
     return pd.concat([base, df], axis=0)
 
 
-##Function to Classify Yelp Review Sentences by Topic
+"""
+Function to Classify Yelp Review Sentences by Topic
+
+vectorizer:     Vectorizer used to train text classifier
+df:             Yelp review data, split out by sentence
+clf:            Classifier to predict sentence topics
+topic:          Topic classifier is attempting to predict
+RETURNS:        Yelp review with prediction as to whether sentence discusses given topic (0/1)
+"""
 def classify_sentences(vectorizer, df, clf, topic):
     X = vectorizer.transform(df["sentence"]) #Transform Yelp Data onto Word Vector Space
     p = pd.Series(clf.predict(X), name=topic)
 
     return pd.concat([df, p], axis=1)
 
+"""
+Function aggregate topic tagged sentences to user level 
 
-##Function Aggregate Topic Tagged Sentences to User Level -> Sum up number of sentences by topic, relevant, and total
+df:     Yelp sentence review-level data
+RETURNS:    Yelp user-level dataset, reporting proportion of user's sentences discussing each topic
+"""
 def create_user_file(df):
     return df.groupby(by="user_id", as_index=False)["topic_food","topic_service","topic_ambience","topic_value","relevant","total"].sum()
 
 
-##Function to Pickle Objects for Further Analysis:
+"""
+Function to pickle user-level Yelp data for further analysis
+
+item:   Dataset to by pickled
+outpath:    Path to pickle dataset at
+RETURNS:    Pickled dataset
+"""
 def save_pickle(item, outpath):
     with open(outpath, "wb") as f:
         pickle.dump(item, f)
@@ -90,7 +120,6 @@ yelp["total"] = 1
 ##Sum Up to User Level
 print "Aggregating to User Level..."
 user = create_user_file(yelp)
-
 print "Size of User-Level File: ", user.shape[0]
 
 

@@ -19,8 +19,8 @@ import xml.etree.ElementTree as ET
 
 """
 Function to parse the 2014 SenEval annotated restaurant review data (XML File) into a Pandas dataframe
-xml_path:   XML file to parse
 
+xml_path:   XML file to parse
 RETURNS:    Pandas DF of parsed XML data for NLP model training and validation
 """
 def parse_data_2014(xml_path):
@@ -53,8 +53,8 @@ def parse_data_2014(xml_path):
 
 """
 Function to parse the 2015 SenEval annotated restaurant review data (XML File) into a Pandas dataframe
-xml_path:   XML file to parse
 
+xml_path:   XML file to parse
 RETURNS:    Pandas DF of parsed XML data for NLP model training and validation
 """
 def parse_data_2015(xml_path):
@@ -83,14 +83,14 @@ def parse_data_2015(xml_path):
                 
     return pd.DataFrame(container)
 
+
 """
 Function to concatentate all SemEval data into a single pandas dataframe
+
 parse_function: Function to use to parse data into pandas DF (either parse_data_2014 or parse_data_2015)
 xml_path:       XML file to parse
-
 RETURNS:        Pandas DF containing ALL SemEval data from both 2014 and 2015
 """
-
 def stack_data(parse_function, xml_path):
     df = parse_function(xml_path)
     return pd.concat([absa_data, df], axis=0)

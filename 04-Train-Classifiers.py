@@ -53,7 +53,13 @@ semeval_train, semeval_test = train_test_split(semeval_data, test_size=0.25, ran
 #print semeval_test.shape
 
 
-##Read in Vectorizers
+
+"""
+Function to read in vectorizers
+
+inpickle:   Path to pickled vectorizer
+RETURNS:    Deserialized vectorizer
+"""
 def open_vectorizer(inpickle):
     with open(inpickle) as f:
         vectorizer = pickle.load(f)
@@ -65,7 +71,18 @@ count_vectorizer = open_vectorizer("data/vectorizers/count_vectorizer.pkl")
 tfidf_vectorizer = open_vectorizer("data/vectorizers/tfidf_vectorizer.pkl")
 
 
-##Train a Specific Classifier Based on a Specific Vectoriation
+
+"""
+Function to train text classifiers
+
+vectorizer:     Vectorizer to use in model training
+classifier:     Classification algorithm to train (e.g. NB, SVM)
+train:          Training data (pandas DF)
+test:           Validation data (pandsd DF)
+topic:          Topic to train model to identify (Food, Service, Ambience, Value)
+
+RETURNS:        Print of Accuracy & Confusion Matrix for specific classifcation algorithm
+"""
 def train_clf(vectorizer, classifier, train, test, topic):    
     train_X = vectorizer.transform(train["sentence"]).toarray()     #Vectorize Training Features
     test_X = vectorizer.transform(test["sentence"]).toarray()       #Vectorize Testing Feature 

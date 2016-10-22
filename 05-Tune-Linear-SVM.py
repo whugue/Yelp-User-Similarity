@@ -51,7 +51,16 @@ semeval_data = absa_data.groupby(by="sentence", as_index=False)[topics].max()
 semeval_train, semeval_test = train_test_split(semeval_data, test_size=0.25, random_state=4444)
 
 
-##Function to Hypertune Linear SVM Parameters on Training Set
+
+"""
+Function to Hypertune Linear SVM Parameters on Training Set (optimized for recall)
+
+vectorizer:		Vectorizer to use in model training
+train:			Training data (pandas DF)
+topic:			Topic to train model to identify (food, service, ambience, value)
+
+RETURNS:		Hyptertuned linear SVM classifier for given topic
+"""
 def tune_linear_svm(vectorizer, train, topic):
 	grid={"C": [0.05,0.5,1,1.5,2,5,10], "loss": ["hinge", "squared_hinge"], "class_weight": [None,"balanced"]}
 
@@ -67,7 +76,15 @@ def tune_linear_svm(vectorizer, train, topic):
 	return clf
 
 
-##Function to Evaluate Final SVM Parameters on Test Set
+"""
+Function to Evaluate Final SVM Parameters on Test Set
+
+vectorizer:		Vectorizer used in model training
+test:			Test data (pandas DF)
+clf:			Trained text classifer for given topic
+topic:			Topic model trained to identify
+RETURNS:		Test data statistics (Accuracy, precision, recall, confusion matrix)
+"""
 def final_test_stats(vectorizer, test, clf, topic):
 	test_X = vectorizer.transform(test["sentence"]).toarray()
 	test_y = test[topic]
@@ -81,13 +98,19 @@ def final_test_stats(vectorizer, test, clf, topic):
 	print ""
 
 
-##Function to Pickle Classifiers for Future Analysis
+"""
+Function to Pickle Classifiers for Future Analysis
+
+clf:		Classifer to be pickled
+outfile:	File path to save classifer to
+RETURNS:	Pickled classifier
+"""
 def pickle_clf(clf, outpickle):
 	with open(outpickle, "wb") as f:
 		pickle.dump(clf, f)
 
 
-##Run Functions
+##Use Above Functions to Hypertune Model
 print "Grid Searching for Optimal Parameters..."
 lsvm_food = tune_linear_svm(binary_vectorizer, semeval_train, "topic_food") 
 lsvm_service = tune_linear_svm(binary_vectorizer, semeval_train, "topic_service")
@@ -95,7 +118,8 @@ lsvm_ambience = tune_linear_svm(binary_vectorizer, semeval_train, "topic_ambienc
 lsvm_value = tune_linear_svm(binary_vectorizer, semeval_train, "topic_value")
 print ""
 
-##Print Final Statistics:
+
+##Print Final Model Statistics:
 print "Tuned Linear SVM Statistics..."
 final_test_stats(binary_vectorizer, semeval_test, lsvm_food, "topic_food")
 final_test_stats(binary_vectorizer, semeval_test, lsvm_service, "topic_service")
