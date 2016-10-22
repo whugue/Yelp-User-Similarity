@@ -88,7 +88,7 @@ charlotte_busines_ids = get_business_ids({"state": {"$in": ["NC","SC"]}, "catego
 
 
 ##Split Reviews out into component sentences
-madison = create_sentence_df("Madison, WI", madison_business_ids                       
+madison = create_sentence_df("Madison, WI", madison_business_ids)                       
 pittsburg = create_sentence_df("Pittsburg, PA", pittsburg_business_ids)                 
 charlotte = create_sentence_df("Charlotte, NC", charlotte_busines_ids)
 
