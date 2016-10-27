@@ -1,4 +1,4 @@
-**NOTE**: Please note that the Yelp data are not saved to this repo (they are a litle too big :)). However, the raw Yelp data are easily downloaded (for FREE!) [here]((https://www.yelp.com/dataset_challenge). Processed Yelp data can be reproduced by running the following python scripts:
+**NOTE**: Please note that the Yelp data are not saved to this repo (they are a litle too big :)). However, the raw Yelp data are easily downloaded (for FREE!) [here](https://www.yelp.com/dataset_challenge). Processed Yelp data can be reproduced by running the following python scripts:
 
 1. 01-Preprocess-Yelp-Data.py
 2. 07-Create-User-File.py
