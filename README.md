@@ -4,8 +4,7 @@ Large online review sites such as Yelp or TripAdvisor have tens or hundreds of m
 You can read a full analysis on [my blog](http://www.huguedata.com/2016/07/15/yelp-me-out/), or check out the [presentation](https://github.com/whugue/Yelp-User-Similarity/blob/master/deck/Yelp-Final.pdf) I gave at Metis  Career Day on June 23, 2016.
 
 
-
-### Program Flow
+#### Program Flow
 The table below provides high-level overviews of what each analysis script does. More information (including specific input/ouput data) can be found in each script's header.
 
 Program 	| Description | 
@@ -18,11 +17,3 @@ Program 	| Description |
 06-Create-User-File.py | Predict topics in Yelp review sentences and aggregate to the user level.
 07-Yelp-Cluster.ipynb | Cluster Yelp users based on topics most discussed in reviews.
 08-Yelp-Viz.ipynb | Produce final visualizations for presentation.
-
-
-
-### Dependencies
-In order to run the scripts described above, you will need the following Python libraries installed: 
-
-Numpy, Pandas, Sci-Kit Learn, Matplotlib, Seaborn, PyLab, Pickle
-Xml, Json, Collections, NLTK, MongoDB and PyMongo, Warnings.
